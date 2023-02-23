@@ -23,10 +23,10 @@ export default class View {
     const todo = this.model.addTodo(title, description);
     this.createRow(todo);
   }
-  editTodo(title, description){
-    const todos = this.model.getTodos();
-    document.getElementById('title').value = todo.title;
-    document.getElementById('description').value = todo.description;
+  editTodo(title,description){
+    //const todo = this.model.getTodos();
+    document.getElementById('title').value = title;
+    document.getElementById('description').value = description;
 
   }
   createRow(todo) {
@@ -54,7 +54,7 @@ export default class View {
     const editBtn = document.createElement('button');
     editBtn.classList.add('btn', 'btn-warning', 'mb-1', 'ml-1');
     editBtn.innerHTML = ` <i class="fa fa-edit"></i>`;
-    editBtn.onclick = () => this.editTodo(todo.id);
+    editBtn.onclick = () => this.editTodo(todo.title, todo.description);
     row.children[3].appendChild(editBtn);
   } 
   
