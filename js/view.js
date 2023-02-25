@@ -9,7 +9,7 @@ export default class View {
 
     this.addTodoForm.onClick((title, description) => this.addTodo(title, description));
   }
-
+  
   setModel(model) {
     this.model = model;
   }
@@ -19,16 +19,17 @@ export default class View {
     todos.forEach((todo) => this.createRow(todo));
   }
 
-  addTodo(title, description) {
-    const todo = this.model.addTodo(title, description);
-    this.createRow(todo);
-  }
-  editTodo(title,description, id){
+ addTodo(title, description) {
+   const todo = this.model.addTodo(title, description);
+   this.createRow(todo);
+ }
+  editTodo(id, title,description){
     //const todo = this.model.getTodos();
-    
     document.getElementById('title').value = title;
     document.getElementById('description').value = description;
-    this.removeTodo(id);
+    this.model.editTodo(id, title, description);
+    document.getElementById("add").textContent = "update";
+    
   }
   createRow(todo) {
     const row = this.table.insertRow();

@@ -41,6 +41,22 @@ export default class Model {
     this.save();
   }
 
+  editTodo(id, title, description){
+    const index = this.findTodo(id);
+    
+    const todo = {
+      id: index,
+      title,
+      description,
+      completed: false
+    }
+
+    this.todos.push(todo);
+    this.save();
+    return { ...todo };
+  }
+  
+
   toggleCompleted(id) {
     const index = this.findTodo(id);
     const todo = this.todos[index];
