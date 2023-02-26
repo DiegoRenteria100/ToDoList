@@ -1,5 +1,4 @@
 import AddTodo from "./components/addTodo.js";
-
 export default class View {
   constructor() {
     this.model = null;
@@ -9,7 +8,7 @@ export default class View {
 
     this.addTodoForm.onClick((title, description) => this.addTodo(title, description));
   }
-  
+  editId=-10;
   setModel(model) {
     this.model = model;
   }
@@ -20,21 +19,40 @@ export default class View {
   }
 
  addTodo(title, description) {
-   const todo = this.model.addTodo(title, description);
-   this.createRow(todo);
+  console.log(this.editId);
+  if(this.editId==-10){
+    const todo = this.model.addTodo(title, description);
+    this.createRow(todo);
+    document.getElementById('title').value = "";
+    document.getElementById('description').value = "";
+  }else{
+    const todo = this.model.editTodo(this.editId,title, description);
+    document.getElementById("add").textContent = "Add";
+    this.editId=-10;
+    this.createRow(todo);
+    document.getElementById('title').value = "";
+    document.getElementById('description').value = "";
+  }
  }
   editTodo(id, title,description){
     //const todo = this.model.getTodos();
+    this.removeTodo(id);
+    // document.getElementById('todoId').value = id;
     document.getElementById('title').value = title;
     document.getElementById('description').value = description;
-    this.model.editTodo(id, title, description);
+    //const todo =this.model.editTodo(id, title, description);
+    //this.createRow(todo);
     document.getElementById("add").textContent = "update";
-    
+    // console.log(title);
+    // console.log(id);
+    // console.log(description);
+    this.editId=id;
   }
   createRow(todo) {
     const row = this.table.insertRow();
     row.setAttribute('id', todo.id);
     row.innerHTML = `
+      <td>${todo.id}</td>
       <td>${todo.title}</td>
       <td>${todo.description}</td>
       <td class="text-center"></td>
@@ -45,19 +63,19 @@ export default class View {
     checkbox.type = 'checkbox';
     checkbox.checked = todo.completed;
     checkbox.onclick = () => this.toggleCompleted(todo.id);
-    row.children[2].appendChild(checkbox);
+    row.children[3].appendChild(checkbox);
 
     const removeBtn = document.createElement('button');
     removeBtn.classList.add('btn', 'btn-danger', 'mb-1', 'ml-1');
     removeBtn.innerHTML = ` <i class="fa fa-trash"></i>`;
     removeBtn.onclick = () => this.removeTodo(todo.id);
-    row.children[3].appendChild(removeBtn);
+    row.children[4].appendChild(removeBtn);
   
     const editBtn = document.createElement('button');
     editBtn.classList.add('btn', 'btn-warning', 'mb-1', 'ml-1');
     editBtn.innerHTML = ` <i class="fa fa-edit"></i>`;
-    editBtn.onclick = () => this.editTodo(todo.title, todo.description,todo.id);
-    row.children[3].appendChild(editBtn);
+    editBtn.onclick = () => this.editTodo(todo.id, todo.title, todo.description);
+    row.children[4].appendChild(editBtn);
   } 
   
 

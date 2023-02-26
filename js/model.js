@@ -42,15 +42,15 @@ export default class Model {
   }
 
   editTodo(id, title, description){
-    const index = this.findTodo(id);
+   // const index = this.findTodo(id);
     
     const todo = {
-      id: index,
+      id: id,
       title,
       description,
       completed: false
     }
-
+   // console.log(id);
     this.todos.push(todo);
     this.save();
     return { ...todo };
