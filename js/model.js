@@ -1,13 +1,17 @@
 export default class Model {
   constructor() {
     this.view = null;
-    this.todos = JSON.parse(localStorage.getItem('todos'));
+    this.loadTodos();
     if (!this.todos || this.todos.length < 1) {
       this.todos = [];
       this.currentId = 0;
     } else {
       this.currentId = this.todos[this.todos.length - 1].id + 1;
     }
+  }
+
+  loadTodos(){
+    this.todos = JSON.parse(localStorage.getItem('todos'));
   }
 
   setView(view) {
@@ -42,15 +46,12 @@ export default class Model {
   }
 
   editTodo(id, title, description){
-   // const index = this.findTodo(id);
-    
     const todo = {
       id: id,
       title,
       description,
       completed: false
     }
-   // console.log(id);
     this.todos.push(todo);
     this.save();
     return { ...todo };
@@ -65,6 +66,8 @@ export default class Model {
   }
 
   save() {
+    this.todos=this.todos.sort((a,b)=>(a.id>b.id)?1:-1);
     localStorage.setItem('todos', JSON.stringify(this.todos));
+    this.loadTodos();
   }
 }
