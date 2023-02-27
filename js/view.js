@@ -1,15 +1,17 @@
 import AddTodo from "./components/addTodo.js";
-
 export default class View {
   constructor() {
     this.model = null;
+
     this.table = document.getElementById('table');
 
     this.addTodoForm = new AddTodo();
 
     this.addTodoForm.onClick((title, description) => this.addTodo(title, description));
   }
-  
+
+  editId = -10;
+
   setModel(model) {
     this.model = model;
   }
@@ -19,21 +21,37 @@ export default class View {
     todos.forEach((todo) => this.createRow(todo));
   }
 
- addTodo(title, description) {
-   const todo = this.model.addTodo(title, description);
-   this.createRow(todo);
- }
-  editTodo(id, title,description){
-    //const todo = this.model.getTodos();
+  addTodo(title, description) {
+    if (this.editId == -10) {
+      const todo = this.model.addTodo(title, description);
+    } else {
+      const todo = this.model.editTodo(this.editId, title, description);
+      document.getElementById("add").textContent = "Add";
+      this.editId = -10;
+    }
+    this.restartTable();
+    this.render();
+    document.getElementById('title').value = "";
+    document.getElementById('description').value = "";
+  }
+
+  editTodo(id, title, description) {
+    this.removeTodo(id);
     document.getElementById('title').value = title;
     document.getElementById('description').value = description;
-    this.model.editTodo(id, title, description);
     document.getElementById("add").textContent = "update";
-    
+    this.editId = id;
+  }
+
+  restartTable() {
+    while (this.table.rows.length > 1) {
+      this.table.deleteRow(1);
+    }
   }
   createRow(todo) {
     const row = this.table.insertRow();
     row.setAttribute('id', todo.id);
+    row.setAttribute('class', "fila");
     row.innerHTML = `
       <td>${todo.title}</td>
       <td>${todo.description}</td>
@@ -52,14 +70,14 @@ export default class View {
     removeBtn.innerHTML = ` <i class="fa fa-trash"></i>`;
     removeBtn.onclick = () => this.removeTodo(todo.id);
     row.children[3].appendChild(removeBtn);
-  
+
     const editBtn = document.createElement('button');
     editBtn.classList.add('btn', 'btn-warning', 'mb-1', 'ml-1');
     editBtn.innerHTML = ` <i class="fa fa-edit"></i>`;
-    editBtn.onclick = () => this.editTodo(todo.title, todo.description,todo.id);
+    editBtn.onclick = () => this.editTodo(todo.id, todo.title, todo.description);
     row.children[3].appendChild(editBtn);
-  } 
-  
+  }
+
 
   toggleCompleted(id) {
     this.model.toggleCompleted(id);
