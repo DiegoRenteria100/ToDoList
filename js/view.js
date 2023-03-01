@@ -36,10 +36,9 @@ export default class View {
   }
 
   editTodo(id, title, description) {
-    this.removeTodo(id);
     document.getElementById('title').value = title;
     document.getElementById('description').value = description;
-    document.getElementById("add").textContent = "update";
+    document.getElementById("add").textContent = "Update";
     this.editId = id;
   }
 

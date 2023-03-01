@@ -46,13 +46,15 @@ export default class Model {
   }
 
   editTodo(id, title, description){
+    const index= this.findTodo(id);
     const todo = {
       id: id,
       title,
       description,
       completed: false
     }
-    this.todos.push(todo);
+    // this.todos.push(todo);
+    this.todos[index]= todo;
     this.save();
     return { ...todo };
   }
@@ -66,7 +68,7 @@ export default class Model {
   }
 
   save() {
-    this.todos=this.todos.sort((a,b)=>(a.id>b.id)?1:-1);
+    // this.todos=this.todos.sort((a,b)=>(a.id>b.id)?1:-1);
     localStorage.setItem('todos', JSON.stringify(this.todos));
     this.loadTodos();
   }
