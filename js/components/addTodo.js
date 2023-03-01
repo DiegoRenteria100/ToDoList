@@ -15,14 +15,7 @@ export default class AddTodo {
     this.btn.onclick = () => {
       if (this.title.value === '' || this.description.value === '') {
         this.alert.show('Title and description are required')
-      }
-      // else if(this.btn.textContent === 'update'){
-      //   this.model.removeTodo(id);
-      //   this.btn.textContent ='add'
-
-      // }
-      
-      else {
+      }else {
         this.alert.hide();
         callback(this.title.value, this.description.value);
       }

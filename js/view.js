@@ -23,9 +23,9 @@ export default class View {
 
   addTodo(title, description) {
     if (this.editId == -10) {
-      const todo = this.model.addTodo(title, description);
+      this.model.addTodo(title, description);
     } else {
-      const todo = this.model.editTodo(this.editId, title, description);
+      this.model.editTodo(this.editId, title, description);
       document.getElementById("add").textContent = "Add";
       this.editId = -10;
     }
