@@ -43,13 +43,9 @@ export default class Model {
 
   editTodo(id, title, description){
     const index= this.findTodo(id);
-    const todo = {
-      id: id,
-      title,
-      description,
-      completed: this.todos[index].completed
-    }
-    this.todos[index]= todo;
+    let todo = this.todos[index]
+    todo.title=title;
+    todo.description= description;
     this.save();
     return { ...todo };
   }
