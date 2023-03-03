@@ -8,9 +8,11 @@ export default class View {
     this.addTodoForm = new AddTodo();
 
     this.addTodoForm.onClick((title, description) => this.addTodo(title, description));
+
+    this.editId = -10;
+
   }
 
-  editId = -10;
 
   setModel(model) {
     this.model = model;
@@ -23,14 +25,14 @@ export default class View {
 
   addTodo(title, description) {
     if (this.editId == -10) {
-      this.model.addTodo(title, description);
+      const todo = this.model.addTodo(title, description);
+      this.createRow(todo);
     } else {
-      this.model.editTodo(this.editId, title, description);
+      const todo = this.model.editTodo(this.editId, title, description);
       document.getElementById("add").textContent = "Add";
+      this.editRow(todo);
       this.editId = -10;
     }
-    this.restartTable();
-    this.render();
     document.getElementById('title').value = "";
     document.getElementById('description').value = "";
   }
@@ -42,11 +44,12 @@ export default class View {
     this.editId = id;
   }
 
-  restartTable() {
-    while (this.table.rows.length > 1) {
-      this.table.deleteRow(1);
-    }
+  editRow(todo) {
+    const row = document.getElementById(todo.id);
+    row.children[0].innerHTML = todo.title;
+    row.children[1].innerHTML = todo.description;
   }
+
   createRow(todo) {
     const row = this.table.insertRow();
     row.setAttribute('id', todo.id);
@@ -73,7 +76,9 @@ export default class View {
     const editBtn = document.createElement('button');
     editBtn.classList.add('btn', 'btn-warning', 'mb-1', 'ml-1');
     editBtn.innerHTML = ` <i class="fa fa-edit"></i>`;
-    editBtn.onclick = () => this.editTodo(todo.id, todo.title, todo.description);
+    editBtn.onclick = () => {
+      this.editTodo(todo.id, row.children[0].innerText, row.children[1].innerText);
+    }
     row.children[3].appendChild(editBtn);
   }
 
@@ -83,7 +88,9 @@ export default class View {
   }
 
   removeTodo(id) {
-    this.model.removeTodo(id);
-    document.getElementById(id).remove();
+    if (this.editId == -10) {
+      this.model.removeTodo(id);
+      document.getElementById(id).remove();
+    }
   }
 }
