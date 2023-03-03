@@ -76,9 +76,7 @@ export default class View {
     const editBtn = document.createElement('button');
     editBtn.classList.add('btn', 'btn-warning', 'mb-1', 'ml-1');
     editBtn.innerHTML = ` <i class="fa fa-edit"></i>`;
-    editBtn.onclick = () => {
-      this.editTodo(todo.id, row.children[0].innerText, row.children[1].innerText);
-    }
+    editBtn.onclick = () => this.editTodo(todo.id, row.children[0].innerText, row.children[1].innerText);
     row.children[3].appendChild(editBtn);
   }
 
